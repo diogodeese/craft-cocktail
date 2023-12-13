@@ -1,18 +1,18 @@
-import cors from 'cors'
-import express from 'express'
-import { router } from './routes.mjs'
+import cors from 'cors';
+import express from 'express';
+import { router } from './routes.mjs';
 
-const app = express()
-const port = 3000
+const app = express();
+const port = 3001;
 
 app.use(
   cors({
     origin: '*',
   })
-)
-app.use(express.json())
-app.use(router)
+);
+app.use(express.json());
+app.use(router);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});
