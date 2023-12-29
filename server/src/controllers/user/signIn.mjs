@@ -1,4 +1,5 @@
 import userService from '../../service/user/index.mjs'
+
 export const signIn = async (request, response) => {
   const { email, password } = request.body
 
