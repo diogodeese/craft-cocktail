@@ -6,6 +6,7 @@ import userController from './controllers/user/index.mjs'
 const router = Router()
 
 // Category
+router.post('/category', categoryController.create)
 router.get('/categories', categoryController.getAll)
 
 // Recipe
