@@ -9,9 +9,7 @@ export const getByCategory = async (categoryId) => {
     const query = `SELECT * FROM recipe WHERE category_id = ${categoryId};`
     const [rows, fields] = await connection.execute(query)
 
-    console.log(rows)
-
-    return
+    return rows
   } catch (error) {
     console.error('Error executing query:', error)
   } finally {

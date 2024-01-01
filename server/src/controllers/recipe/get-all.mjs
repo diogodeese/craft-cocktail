@@ -1,5 +1,7 @@
 import recipeService from '../../service/recipe/index.mjs'
 
 export const getAll = async (request, response) => {
-  await recipeService.getAll()
+  const recipes = await recipeService.getAll()
+
+  response.json({ recipes })
 }
