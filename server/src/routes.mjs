@@ -13,6 +13,7 @@ router.get('/categories', categoryController.getAll)
 router.get('/recipes', recipeController.getAll)
 router.get('/recipes/byCategory/:categoryId', recipeController.getByCategory)
 router.get('/recipe/:id', recipeController.get)
+router.post('/recipe', recipeController.create)
 
 // User
 router.post('/signIn', userController.signIn)
