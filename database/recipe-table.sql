@@ -10,5 +10,5 @@ CREATE TABLE recipe (
     category_id INT,
     time TIME NOT NULL,
     cost VARCHAR(50) NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES categories(id)
+    FOREIGN KEY (category_id) REFERENCES category(id)
 );
