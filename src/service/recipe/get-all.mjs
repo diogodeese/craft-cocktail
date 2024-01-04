@@ -6,7 +6,7 @@ export const getAll = async () => {
   try {
     connection = await getConnection()
 
-    const query = `SELECT * FROM recipe`
+    const query = `SELECT recipe.*, category.name AS category_name FROM recipe JOIN category ON recipe.category_id = category.id;`
     const [rows, fields] = await connection.execute(query)
 
     return rows
