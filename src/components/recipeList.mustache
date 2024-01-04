@@ -1,0 +1,23 @@
+<div style="display: flex">
+  {{#recipes}}
+  <div
+    style="
+      border: 1px solid grey;
+      margin-inline: 8px;
+      padding-inline: 16px;
+      border-radius: 4px;
+      width: 200px;
+    "
+  >
+    <h2>{{ name }}</h2>
+    <p>{{ id }}</p>
+    <p>Author: {{ author }}</p>
+    <p>Ingredients: {{ ingredients }}</p>
+    <p>Description: {{ preparation_description }}</p>
+    <p>Difficulty: {{ difficulty }}</p>
+    <p>Category: {{ category_name }}</p>
+    <p>Time: {{ time }}</p>
+    <p>Cost: {{ cost }}</p>
+  </div>
+  {{/recipes}}
+</div>
