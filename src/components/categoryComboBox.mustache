@@ -1,0 +1,19 @@
+<div id="categoryDropdownContainer">
+  <select id="categoryDropdown"></select>
+</div>
+
+<script>
+  fetch('/categories')
+    .then((response) => response.json())
+    .then((data) => {
+      const categoryDropdown = document.getElementById('categoryDropdown')
+
+      data.categories.forEach((category) => {
+        const option = document.createElement('option')
+        option.value = category.id
+        option.text = category.name
+        categoryDropdown.add(option)
+      })
+    })
+    .catch((error) => console.error('Error fetching categories:', error))
+</script>
