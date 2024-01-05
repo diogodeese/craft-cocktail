@@ -3,11 +3,11 @@ import userService from '../../service/user/index.mjs'
 export const signIn = async (request, response) => {
   const { email, password } = request.body
 
-  const signIn = await userService.signIn(email, password)
+  const user = await userService.signIn(email, password)
 
-  if (!signIn) {
-    response.send('Failed to sign in')
-  } else {
+  if (user) {
     response.send('Successfully signed in')
+  } else {
+    response.send('Failed to sign in')
   }
 }
