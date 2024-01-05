@@ -1,0 +1,22 @@
+<div id="categoryDropdownContainer">
+  <select id="categoryDropdown"></select>
+</div>
+
+<script>
+  // Fetch categories from the backend endpoint
+  fetch('/categories')
+    .then((response) => response.json())
+    .then((data) => {
+      // Get the dropdown element
+      const categoryDropdown = document.getElementById('categoryDropdown')
+
+      // Iterate through the categories and populate the dropdown
+      data.categories.forEach((category) => {
+        const option = document.createElement('option')
+        option.value = category.id // Assuming your category object has an 'id' property
+        option.text = category.name // Assuming your category object has a 'name' property
+        categoryDropdown.add(option)
+      })
+    })
+    .catch((error) => console.error('Error fetching categories:', error))
+</script>
