@@ -16,7 +16,6 @@ export const signIn = async (email, password) => {
       const passwordMatch = await bcrypt.compare(password, user.password)
 
       if (passwordMatch) {
-        console.log('User authenticated:', user)
         return user
       } else {
         console.log('Invalid credentials')

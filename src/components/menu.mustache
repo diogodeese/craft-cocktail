@@ -1,0 +1,23 @@
+<div id="menuContainer"></div>
+
+<script>
+  fetch('/menu')
+    .then((response) => response.json())
+    .then((data) => {
+      const menuContainer = document.getElementById('menuContainer')
+
+      const menuList = document.createElement('ul')
+
+      data.menuItems.forEach((menuItem) => {
+        const listItem = document.createElement('li')
+        const link = document.createElement('a')
+        link.href = menuItem.url
+        link.textContent = menuItem.name
+        listItem.appendChild(link)
+        menuList.appendChild(listItem)
+      })
+
+      menuContainer.appendChild(menuList)
+    })
+    .catch((error) => console.error('Error fetching menu:', error))
+</script>

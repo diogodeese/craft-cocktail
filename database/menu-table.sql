@@ -1,0 +1,8 @@
+use craftcocktail;
+
+CREATE TABLE menu (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL,
+  url VARCHAR(100) NOT NULL,
+  order INT NOT NULL
+);

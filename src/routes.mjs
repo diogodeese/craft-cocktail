@@ -1,9 +1,14 @@
 import { Router } from 'express'
+import appController from './controllers/app/index.mjs'
 import categoryController from './controllers/category/index.mjs'
 import recipeController from './controllers/recipe/index.mjs'
 import userController from './controllers/user/index.mjs'
 
 const router = Router()
+
+// App
+router.get('/', appController.home)
+router.get('/menu', appController.menu)
 
 // Category
 router.post('/category', categoryController.create)
