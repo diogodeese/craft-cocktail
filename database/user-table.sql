@@ -1,6 +1,6 @@
 USE craftcocktail;
 
-CREATE TABLE User (
+CREATE TABLE user (
     id INT PRIMARY KEY AUTO_INCREMENT,
     email UNIQUE INDEX VARCHAR(191) NOT NULL,
     password VARCHAR(191) NOT NULL,
