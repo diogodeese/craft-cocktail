@@ -21,9 +21,9 @@ router.get('/recipe/:id', recipeController.get)
 router.post('/recipe', recipeController.create)
 
 // User
-router.get('/signIn', userController.signInPage)
+router.get('/signIn', userController.signIn)
 router.post('/signIn', userController.signIn)
-router.get('/signUp', userController.signUpPage)
+router.get('/signUp', userController.signUp)
 router.post('/signUp', userController.signUp)
 
 export { router }

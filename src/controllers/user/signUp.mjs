@@ -1,13 +1,24 @@
 import userService from '../../service/user/index.mjs'
 
 export const signUp = async (request, response) => {
-  const { email, password } = request.body
+  switch (request.method) {
+    case 'GET':
+      response.render('signUp')
+      break
 
-  const user = await userService.signUp(email, password)
+    case 'POST':
+      const { email, password } = request.body
 
-  if (user) {
-    response.send('Successfully signed up')
-  } else {
-    response.send('Failed to sign up')
+      const user = await userService.signUp(email, password)
+
+      if (user) {
+        response.send('Successfully signed up')
+      } else {
+        response.send('Failed to sign up')
+      }
+      break
+
+    default:
+      response.status(405).send('Method Not Allowed')
   }
 }
