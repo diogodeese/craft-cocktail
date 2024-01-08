@@ -9,12 +9,12 @@ export const signIn = async (request, response) => {
     case 'POST':
       const { email, password } = request.body
 
-      const user = await userService.signIn(email, password)
+      const token = await userService.signIn(email, password)
 
-      if (user) {
-        response.send('Successfully signed in')
+      if (token) {
+        response.json(token)
       } else {
-        response.send('Failed to sign in')
+        response.json({ message: 'Failed to sign in' })
       }
       break
 

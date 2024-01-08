@@ -1,5 +1,8 @@
 import bcrypt from 'bcrypt'
+import dotenv from 'dotenv'
+import jwt from 'jsonwebtoken'
 import { getConnection } from './../../config/database-connection.mjs'
+dotenv.config()
 
 export const signIn = async (email, password) => {
   let connection
@@ -16,7 +19,15 @@ export const signIn = async (email, password) => {
       const passwordMatch = await bcrypt.compare(password, user.password)
 
       if (passwordMatch) {
-        return user
+        let token = await jwt.sign(
+          { userId: user.userId },
+          process.env.ACCESS_TOKEN_SECRET,
+          {
+            expiresIn: '24h',
+          }
+        )
+
+        return token
       } else {
         console.log('Invalid credentials')
         return null

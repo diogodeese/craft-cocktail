@@ -3,6 +3,7 @@ import appController from './controllers/app/index.mjs'
 import categoryController from './controllers/category/index.mjs'
 import recipeController from './controllers/recipe/index.mjs'
 import userController from './controllers/user/index.mjs'
+import { verifyToken } from './middleware/authMiddleware.mjs'
 
 const router = Router()
 
@@ -17,7 +18,7 @@ router.get('/categories', categoryController.getAll)
 // Recipe
 router.get('/recipes', recipeController.getAll)
 router.get('/recipes/byCategory/:categoryId', recipeController.getByCategory)
-router.get('/recipe/:id', recipeController.get)
+router.get('/recipe/:id', verifyToken, recipeController.get)
 router.post('/recipe', recipeController.create)
 
 // User

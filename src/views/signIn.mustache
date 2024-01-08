@@ -18,6 +18,7 @@
       </div>
       <div class="w-1/2">
         <form
+          id="signInForm"
           method="post"
           action="/signIn"
           class="flex h-screen w-auto flex-col items-center justify-center gap-3"
@@ -46,19 +47,43 @@
         </form>
       </div>
     </div>
+
+    <script>
+      document
+        .getElementById('signInForm')
+        .addEventListener('submit', function (event) {
+          event.preventDefault()
+
+          const formData = {
+            email: document.querySelector('[name="email"]').value,
+            password: document.querySelector('[name="password"]').value,
+          }
+
+          fetch('/signIn', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok')
+              }
+              return response.json()
+            })
+            .then((data) => {
+              localStorage.setItem('token', data)
+            })
+            .catch((error) => {
+              console.error('Error during fetch:', error)
+            })
+        })
+    </script>
   </body>
 </html>
 
 <style>
-  /*
-! tailwindcss v3.4.1 | MIT License | https://tailwindcss.com
-*/
-
-  /*
-1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
-2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
-*/
-
   *,
   ::before,
   ::after {
