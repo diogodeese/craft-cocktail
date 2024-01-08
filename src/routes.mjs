@@ -18,8 +18,8 @@ router.get('/categories', categoryController.getAll)
 // Recipe
 router.get('/recipes', recipeController.getAll)
 router.get('/recipes/byCategory/:categoryId', recipeController.getByCategory)
-router.get('/recipe/:id', verifyToken, recipeController.get)
-router.post('/recipe', recipeController.create)
+router.get('/recipe/:id', recipeController.get)
+router.post('/recipe', verifyToken, recipeController.create)
 
 // User
 router.get('/signIn', userController.signIn)

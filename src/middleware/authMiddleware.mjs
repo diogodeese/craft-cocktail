@@ -4,7 +4,7 @@ dotenv.config()
 
 export const verifyToken = async (request, response, next) => {
   const token = request.headers.authorization?.split(' ')[1]
-  console.log(token)
+
   if (!token) return response.status(401).json({ error: 'Access denied' })
 
   try {
