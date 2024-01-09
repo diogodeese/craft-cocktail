@@ -1,24 +1,69 @@
-<div style="display: flex">
+<div class="flex gap-6 p-4">
   {{#recipes}}
-  <div
-    style="
-      border: 1px solid grey;
-      margin-inline: 8px;
-      padding-inline: 16px;
-      border-radius: 4px;
-      width: 200px;
-    "
-  >
-    <h2>
-      <a href="/recipe/{{ id }}">{{ name }}</a>
-    </h2>
-    <p>Author: {{ author }}</p>
-    <p>Ingredients: {{ ingredients }}</p>
-    <p>Description: {{ preparation_description }}</p>
-    <p>Difficulty: {{ difficulty }}</p>
-    <p>Category: {{ category_name }}</p>
-    <p>Time: {{ time }}</p>
-    <p>Cost: {{ cost }}</p>
+  <div class="relative h-56 w-52 bg-slate-300 rounded-md">
+    <div class="h-22 absolute bottom-0 left-0 w-full bg-slate-400 rounded-md">
+      <div class="flex">
+        <div class="p-2">
+          <h2 class="text-base font-bold">{{ recipe_name }}</h2>
+          <p class="text-xl font-medium text-red-800">{{ cost }}€</p>
+          <div id="stars" class="flex"></div>
+        </div>
+        <div
+          class="absolute right-4 top-4 flex flex-col items-center justify-center"
+        >
+          <i class="ri-heart-line text-4xl text-red-700"></i>
+          <p id="time" class="mt-2 text-xs"></p>
+        </div>
+      </div>
+    </div>
   </div>
   {{/recipes}}
+  {{^recipes}}
+  <h1>No recipes</h1>
+  {{/recipes}}
 </div>
+
+<script>
+  function createStar(isYellow) {
+    const starElement = document.createElement('i')
+    if (isYellow) {
+      starElement.className = 'ri-star-fill text-yellow-500'
+    } else {
+      starElement.className = 'ri-star-fill'
+    }
+    return starElement
+  }
+
+  ;`{{#recipes}}`
+  let stars = document.getElementById('stars')
+  let yellow = document.createElement('i')
+  yellow.className = 'ri-star-fill text-yellow-500'
+  const gray = document.createElement('i')
+  gray.className = 'ri-star-fill'
+
+  for (let i = 0; i < `{{difficulty}}`; i++) {
+    stars.appendChild(createStar(true))
+  }
+  const numGray = 5 - `{{difficulty}}`
+
+  for (let i = 0; i < numGray; i++) {
+    stars.appendChild(createStar(false))
+  }
+
+  const time = document.getElementById('time')
+  function formatTime(timeString) {
+    const [hours, minutes, seconds] = timeString.split(':').map(Number)
+    return { hours, minutes, seconds }
+  }
+
+  const { hours, minutes, seconds } = formatTime(`{{time}}`)
+  let formatedTime = ''
+  if (hours != 0 && minutes != 0) {
+    formatedTime = hours + 'h e ' + minutes + 'm'
+  } else {
+    formatedTime = minutes + 'm'
+  }
+
+  time.innerHTML = formatedTime
+  ;`{{/recipes}}`
+</script>
