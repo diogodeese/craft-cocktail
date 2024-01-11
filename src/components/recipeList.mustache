@@ -1,4 +1,6 @@
-<div class="flex gap-6 p-4">
+<div
+  class="flex flex-wrap gap-6 bg-slate-900 p-4 content-start h-[calc(100%-91px)]"
+>
   {{#recipes}}
   <div
     class="relative h-56 w-52 bg-slate-300 rounded-md cursor-pointer"
@@ -7,7 +9,7 @@
     <div class="h-22 absolute bottom-0 left-0 w-full bg-slate-400 rounded-md">
       <div class="flex">
         <div class="p-2">
-          <h2 class="text-base font-bold">{{ recipe_name }}</h2>
+          <h2 class="text-base font-bold">{{ name }}</h2>
           <p class="text-xl font-medium text-red-800">{{ cost }}€</p>
           <div id="stars" class="flex"></div>
         </div>
@@ -60,13 +62,13 @@
   }
 
   const { hours, minutes, seconds } = formatTime(`{{time}}`)
-  let formatedTime = ''
+  let formattedTime = ''
   if (hours != 0 && minutes != 0) {
-    formatedTime = hours + 'h e ' + minutes + 'm'
+    formattedTime = hours + 'h e ' + minutes + 'm'
   } else {
-    formatedTime = minutes + 'm'
+    formattedTime = minutes + 'm'
   }
 
-  time.innerHTML = formatedTime
+  time.innerHTML = formattedTime
   ;`{{/recipes}}`
 </script>
