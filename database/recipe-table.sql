@@ -2,7 +2,7 @@ use craftcocktail;
 
 CREATE TABLE recipe (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    recipe_name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     author VARCHAR(255) NOT NULL,
     ingredients TEXT NOT NULL,
     preparation_description TEXT NOT NULL,
