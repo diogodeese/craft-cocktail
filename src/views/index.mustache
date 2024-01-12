@@ -10,7 +10,40 @@
   </header>
   <body>
     {{> ../components/menu}}
-    <div class="w-full bg-slate-700"></div>
+    <div
+      class="mx-auto flex h-[calc(100%-91px)] w-full items-center bg-slate-900"
+    >
+      <div class="flex w-4/5 items-center justify-center">
+        <div
+          class="flex flex-col items-start justify-center p-24 text-slate-200"
+        >
+          <h3 class="text-4xl text-slate-400">In mood for a drink?</h3>
+          <div class="bg text-8xl text-slate-300">
+            <h1>Your guide to</h1>
+            <h1>delicious</h1>
+            <h1>cocktails</h1>
+          </div>
+          <h5 class="mt-4 w-96 text-sm text-slate-500">
+            Welcome to Craft Cocktails - where every sip tells a story and every
+            pour is an art. Unleash your inner bartender with a diverse array of
+            cocktails inspirations
+          </h5>
+          <button
+            class="mt-4 w-96 rounded bg-slate-600 p-2"
+            onclick="window.location.href='/recipes'"
+          >
+            Browse recipes
+          </button>
+        </div>
+      </div>
+      <div class="flex h-full w-2/3">
+        <img
+          class="aspect-video object-cover"
+          src="https://images.unsplash.com/photo-1642647392045-8592bf9b5900?q=80&w=1972&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt=""
+        />
+      </div>
+    </div>
   </body>
 </html>
 
