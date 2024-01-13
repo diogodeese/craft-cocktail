@@ -11,7 +11,7 @@ export const signIn = async (email, password) => {
     connection = await getConnection()
 
     const query = 'SELECT * FROM user WHERE email = ?'
-    const [rows, fields] = await connection.execute(query, [email])
+    const [rows] = await connection.execute(query, [email])
 
     if (rows.length > 0) {
       const user = rows[0]
@@ -19,7 +19,7 @@ export const signIn = async (email, password) => {
       const passwordMatch = await bcrypt.compare(password, user.password)
 
       if (passwordMatch) {
-        let token = await jwt.sign(
+        let token = jwt.sign(
           { userId: user.userId },
           process.env.ACCESS_TOKEN_SECRET,
           {
