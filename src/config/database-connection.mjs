@@ -1,10 +1,12 @@
 import mysql from 'mysql2'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const dbConfig = {
-  host: 'localhost',
-  user: 'craftcocktail',
-  password: 'mysqlcraftcocktail',
-  database: 'craftcocktail',
+  host: process.env.DATABASE_HOST,
+  database: process.env.DATABASE_NAME,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
 }
 
 const pool = mysql.createPool(dbConfig)
