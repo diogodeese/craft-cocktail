@@ -17,7 +17,7 @@
           class="absolute right-4 top-4 flex flex-col items-center justify-center"
         >
           <i class="ri-heart-line text-4xl text-red-700"></i>
-          <p id="time" class="mt-2 text-xs"></p>
+          <p id="time-{{ id }}" class="mt-2 text-xs"></p>
         </div>
       </div>
     </div>
@@ -50,17 +50,19 @@
     starsContainer.appendChild(grayStar.cloneNode(true))
   }
 
-  timeContainer = document.getElementById('time')
+  timeContainer = document.getElementById('time-{{id}}')
 
   function formatTime(timeString) {
     ;[hours, minutes, seconds] = timeString.split(':').map(Number)
   }
-
   formatTime('{{time}}')
   formattedTime = ''
 
-  if (hours !== 0 && minutes !== 0) {
-    formattedTime = hours + 'h e ' + minutes + 'm'
+  if (hours !== 0) {
+    formattedTime = hours + 'h'
+    if (minutes !== 0) {
+      formattedTime += ' e ' + minutes + 'm'
+    }
   } else {
     formattedTime = minutes + 'm'
   }
