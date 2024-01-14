@@ -11,7 +11,7 @@
         <div class="p-2">
           <h2 class="text-base font-bold">{{ name }}</h2>
           <p class="text-xl font-medium text-red-800">{{ cost }}€</p>
-          <div id="stars" class="flex"></div>
+          <div id="stars-{{ id }}" class="flex"></div>
         </div>
         <div
           class="absolute right-4 top-4 flex flex-col items-center justify-center"
@@ -29,46 +29,42 @@
 </div>
 
 <script>
-  function createStar(isYellow) {
-    const starElement = document.createElement('i')
-    if (isYellow) {
-      starElement.className = 'ri-star-fill text-yellow-500'
-    } else {
-      starElement.className = 'ri-star-fill'
-    }
-    return starElement
-  }
+  let starsContainer
+  let yellowStar = document.createElement('i')
+  const grayStar = document.createElement('i')
+  let numGray
 
+  let timeContainer, hours, minutes, seconds, formattedTime
   ;`{{#recipes}}`
-  let stars = document.getElementById('stars')
-  let yellow = document.createElement('i')
-  yellow.className = 'ri-star-fill text-yellow-500'
-  const gray = document.createElement('i')
-  gray.className = 'ri-star-fill'
+  starsContainer = document.getElementById('stars-{{id}}')
+  yellowStar.className = 'ri-star-fill text-yellow-500'
+  grayStar.className = 'ri-star-fill'
 
   for (let i = 0; i < `{{difficulty}}`; i++) {
-    stars.appendChild(createStar(true))
+    starsContainer.appendChild(yellowStar.cloneNode(true))
   }
-  const numGray = 5 - `{{difficulty}}`
+
+  numGray = 5 - `{{difficulty}}`
 
   for (let i = 0; i < numGray; i++) {
-    stars.appendChild(createStar(false))
+    starsContainer.appendChild(grayStar.cloneNode(true))
   }
 
-  const time = document.getElementById('time')
+  timeContainer = document.getElementById('time')
+
   function formatTime(timeString) {
-    const [hours, minutes, seconds] = timeString.split(':').map(Number)
-    return { hours, minutes, seconds }
+    ;[hours, minutes, seconds] = timeString.split(':').map(Number)
   }
 
-  const { hours, minutes, seconds } = formatTime(`{{time}}`)
-  let formattedTime = ''
-  if (hours != 0 && minutes != 0) {
+  formatTime('{{time}}')
+  formattedTime = ''
+
+  if (hours !== 0 && minutes !== 0) {
     formattedTime = hours + 'h e ' + minutes + 'm'
   } else {
     formattedTime = minutes + 'm'
   }
 
-  time.innerHTML = formattedTime
+  timeContainer.innerHTML = formattedTime
   ;`{{/recipes}}`
 </script>
