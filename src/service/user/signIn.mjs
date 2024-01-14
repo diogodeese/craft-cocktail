@@ -12,7 +12,6 @@ export const signIn = async (email, password) => {
 
     const query = 'SELECT * FROM user WHERE email = ?'
     const [rows] = await connection.execute(query, [email])
-
     if (rows.length > 0) {
       const user = rows[0]
 
@@ -20,7 +19,7 @@ export const signIn = async (email, password) => {
 
       if (passwordMatch) {
         let token = jwt.sign(
-          { userId: user.userId },
+          { userId: user.id },
           process.env.ACCESS_TOKEN_SECRET,
           {
             expiresIn: '24h',
