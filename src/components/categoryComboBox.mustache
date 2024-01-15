@@ -1,5 +1,5 @@
-<div id="categoryDropdownContainer">
-  <select id="categoryDropdown"></select>
+<div id="categoryDropdownContainer" class="bg-slate-700 p-4">
+  <select id="categoryDropdown" class="bg-slate-700 text-white"></select>
 </div>
 
 <script>
@@ -7,6 +7,11 @@
     .then((response) => response.json())
     .then((data) => {
       const categoryDropdown = document.getElementById('categoryDropdown')
+      categoryDropdown.id = 'dropdown'
+      const doption = document.createElement('option')
+      doption.text = 'Select a category'
+      doption.value = 0
+      categoryDropdown.add(doption)
 
       data.categories.forEach((category) => {
         const option = document.createElement('option')
@@ -16,4 +21,14 @@
       })
     })
     .catch((error) => console.error('Error fetching categories:', error))
+
+  document
+    .getElementById('categoryDropdownContainer')
+    .addEventListener('change', function (e) {
+      if (e.target.value == 0) {
+        window.location.href = '/recipes'
+      } else {
+        window.location.href = `/recipes/byCategory/${e.target.value}`
+      }
+    })
 </script>
