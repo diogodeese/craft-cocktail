@@ -2,13 +2,13 @@
   class="flex flex-wrap gap-6 bg-slate-900 p-4 content-start h-[calc(100%-91px)]"
 >
   {{#recipes}}
-  <div
-    class="relative h-56 w-52 bg-slate-300 rounded-md cursor-pointer"
-    onclick="window.location.href='/recipe/{{ id }}'"
-  >
+  <div class="relative h-56 w-52 bg-slate-300 rounded-md">
     <div class="h-22 absolute bottom-0 left-0 w-full bg-slate-400 rounded-md">
       <div class="flex">
-        <div class="p-2">
+        <div
+          class="p-2 cursor-pointer"
+          onclick="window.location.href='/recipe/{{ id }}'"
+        >
           <h2 class="text-base font-bold">{{ name }}</h2>
           <p class="text-xl font-medium text-red-800">{{ cost }}€</p>
           <div id="stars-{{ id }}" class="flex"></div>
@@ -16,7 +16,7 @@
         <div
           class="absolute right-4 top-4 flex flex-col items-center justify-center"
         >
-          <i class="ri-heart-line text-4xl text-red-700"></i>
+          <i class="ri-heart-line text-4xl text-red-700 cursor-pointer"></i>
           <p id="time-{{ id }}" class="mt-2 text-xs"></p>
         </div>
       </div>
