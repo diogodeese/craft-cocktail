@@ -71,7 +71,7 @@
         </button>
       </div>
       <!-- Modal body -->
-      <form class="p-4 md:p-5" action="/recipe" method="post">
+      <form class="p-4 md:p-5" onsubmit="addRecipe()">
         <div class="grid gap-4 mb-4 grid-cols-2">
           <div class="col-span-2">
             <label
@@ -90,16 +90,63 @@
           </div>
           <div class="col-span-2 sm:col-span-1">
             <label
-              for="cost"
+              for="ingredients"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Cost</label
+              >Ingredients</label
             >
             <input
               type="number"
-              name="cost"
-              id="cost"
+              name="ingredients"
+              id="ingredients"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Lime, Licor beirão"
+              required=""
+            />
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label
+              for="time"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >time</label
+            >
+            <input
+              type="number"
+              name="time"
+              id="time"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Time in minutes"
+              required=""
+            />
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label
+              for="difficulty"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Difficulty</label
+            >
+            <input
+              type="number"
+              name="difficulty"
+              id="difficulty"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="$2999"
+              required=""
+            />
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label
+              for="difficulty"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Difficulty</label
+            >
+            <input
+              type="number"
+              max="5"
+              min="1"
+              name="difficulty"
+              id="difficulty"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="0 - 5"
               required=""
             />
           </div>
@@ -156,3 +203,31 @@
     </div>
   </div>
 </div>
+
+<script>
+  function addRecipe() {
+    const token = localStorage.getItem('token')
+
+    let newRecipe = {
+      name: document.getElementById('name').value,
+      author: 1,
+      ingredients: document.getElementById('ingredients').value,
+      preparation_description: document.getElementById('description').value,
+      difficulty: document.getElementById('difficulty').value,
+      category_id: 1,
+      time: document.getElementById('time').value,
+      cost: document.getElementById('cost').value,
+    }
+
+    fetch('/recipe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: { newRecipe },
+    }).then((result) =>
+      res.json({ message: 'Recipe created successfully', result })
+    )
+  }
+</script>
