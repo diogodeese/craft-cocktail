@@ -16,13 +16,18 @@
         <div
           class="absolute right-4 top-4 flex flex-col items-center justify-center"
         >
-          <i class="ri-heart-line text-4xl text-red-700 cursor-pointer"></i>
+          <i
+            class="ri-heart-line text-4xl text-red-700 cursor-pointer"
+            onclick="favoriteRecipe()"
+          ></i>
           <p id="time-{{ id }}" class="mt-2 text-xs"></p>
         </div>
       </div>
     </div>
   </div>
   {{/recipes}}
+  {{> ../components/formRecipe }}
+
   {{^recipes}}
   <h1>No recipes</h1>
   {{/recipes}}
@@ -36,6 +41,31 @@
 
   let timeContainer, hours, minutes, seconds, formattedTime
   ;`{{#recipes}}`
+  function favoriteRecipe() {
+    fetch('/favorite', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        recipeId: '{{id}}',
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.data}`)
+        }
+        return res.json()
+      })
+      .then((data) => {
+        console.log(data)
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
+  }
+
   starsContainer = document.getElementById('stars-{{id}}')
   yellowStar.className = 'ri-star-fill text-yellow-500'
   grayStar.className = 'ri-star-fill'
