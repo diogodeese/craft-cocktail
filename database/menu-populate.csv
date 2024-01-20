@@ -1,0 +1,6 @@
+[{"id":1, "name":"Home", "url":"/", "order":1, "logged_in_users_visible":1, "logged_out_users_visible":1},
+ {"id":2, "name":"Recipes", "url":"/recipes", "order":2, "logged_in_users_visible":1, "logged_out_users_visible":1},
+ {"id":3, "name":"Sign In", "url":"/signIn", "order":3, "logged_in_users_visible":0, "logged_out_users_visible":1},
+ {"id":4, "name":"Sign Up", "url":"/signUp", "order":4, "logged_in_users_visible":0, "logged_out_users_visible":1},
+ {"id":5, "name":"Sign Out", "url":"/", "order":5, "logged_in_users_visible":1, "logged_out_users_visible":0},
+ {"id":6, "name":"Back Office", "url":"/backoffice", "order":4, "logged_in_users_visible":0, "logged_out_users_visible":0}]
