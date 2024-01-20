@@ -46,11 +46,11 @@
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
-        recipeId: '{{id}}',
-      }),
+        recipeId: '{{id}}'
+      })
     })
       .then((res) => {
         if (!res.ok) {

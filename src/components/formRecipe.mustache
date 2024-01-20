@@ -107,7 +107,7 @@
             <label
               for="time"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >time</label
+              >Time</label
             >
             <input
               type="number"
@@ -216,16 +216,16 @@
       difficulty: document.getElementById('difficulty').value,
       category_id: 1,
       time: document.getElementById('time').value,
-      cost: document.getElementById('cost').value,
+      cost: document.getElementById('cost').value
     }
 
     fetch('/recipe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`
       },
-      body: { newRecipe },
+      body: { newRecipe }
     }).then((result) =>
       res.json({ message: 'Recipe created successfully', result })
     )

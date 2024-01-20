@@ -11,10 +11,10 @@ export const menu = async (userId = null) => {
     const menuItems = menuRows ?? null
 
     let userProfile
-    if(userId) {
-      const userQuery = 'SELECT email FROM user WHERE `id` = ' + userId
+    if (userId) {
+      const userQuery = 'SELECT email, isAdmin FROM user WHERE `id` = ' + userId
       const [userRows] = await connection.execute(userQuery)
-      userProfile = userRows
+      userProfile = userRows[0]
     } else {
       userProfile = null
     }

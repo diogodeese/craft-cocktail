@@ -1,13 +1,32 @@
 import { getConnection } from './../../config/database-connection.mjs'
 
-export const getAll = async () => {
+export const getAll = async (userId = null) => {
   let connection
 
   try {
     connection = await getConnection()
 
-    const query = `SELECT recipe.*, category.name AS category_name FROM recipe JOIN category ON recipe.category_id = category.id LEFT JOIN favorite ON recipe.id = favorite.recipe_id AND favorite.user_id = 1;`
-    const [rows] = await connection.execute(query)
+    let query
+    if (userId) {
+      query = `
+      SELECT
+      recipe.*,
+      category.name AS category_name,
+      CASE WHEN favorite.recipe_id IS NOT NULL THEN true ELSE false END AS is_favorited
+      FROM
+        recipe
+      JOIN
+        category ON recipe.category_id = category.id
+      LEFT JOIN
+        favorite ON recipe.id = favorite.recipe_id AND favorite.user_id = ?
+      `
+    } else {
+      query = `
+        SELECT recipe.*, category.name AS category_name 
+        FROM recipe 
+        JOIN category ON recipe.category_id = category.id `
+    }
+    const [rows] = await connection.execute(query, [userId])
 
     return rows
   } catch (error) {

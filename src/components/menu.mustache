@@ -29,10 +29,16 @@
         link.className = 'rounded-md p-2 text-white hover:bg-slate-700'
 
         let shouldShowLink
-        if (data.userProfile !== null) {
-          shouldShowLink = menuItem.logged_in_users_visible
+        if (menuItem.id === 6) {
+          if (data.userProfile?.isAdmin) {
+            shouldShowLink = true
+          }
         } else {
-          shouldShowLink = menuItem.logged_out_users_visible
+          if (data.userProfile !== null) {
+            shouldShowLink = menuItem.logged_in_users_visible
+          } else {
+            shouldShowLink = menuItem.logged_out_users_visible
+          }
         }
 
         if (shouldShowLink) {

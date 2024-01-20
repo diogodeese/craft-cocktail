@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'
 import { getConnection } from './../../config/database-connection.mjs'
+import userService from "./index.mjs"
 
 // Function to check if an email already exists in the database
 const isEmailExists = async (email) => {
@@ -50,7 +51,9 @@ export const signUp = async (email, password) => {
       hashedPassword,
     ])
 
-    return { userId: result.insertId, email }
+    const token = await userService.signIn(email, password)
+
+    return token
   } catch (error) {
     console.error('Error signing up user:', error)
     throw error

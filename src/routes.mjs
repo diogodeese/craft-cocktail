@@ -11,6 +11,7 @@ const router = Router()
 // App
 router.get('/', appController.home)
 router.get('/menu', appController.menu)
+router.get('/backoffice', appController.backoffice)
 
 // Category
 router.post('/category', categoryController.create)
