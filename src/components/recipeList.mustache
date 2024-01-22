@@ -1,102 +1,169 @@
 <div
   class="flex flex-wrap gap-6 bg-slate-900 p-4 content-start h-[calc(100%-91px)]"
->
-  {{#recipes}}
-  <div class="relative h-56 w-52 bg-slate-300 rounded-md">
-    <div class="h-22 absolute bottom-0 left-0 w-full bg-slate-400 rounded-md">
-      <div class="flex">
-        <div
-          class="p-2 cursor-pointer"
-          onclick="window.location.href='/recipe/{{ id }}'"
-        >
-          <h2 class="text-base font-bold">{{ name }}</h2>
-          <p class="text-xl font-medium text-red-800">{{ cost }}€</p>
-          <div id="stars-{{ id }}" class="flex"></div>
-        </div>
-        <div
-          class="absolute right-4 top-4 flex flex-col items-center justify-center"
-        >
-          <i
-            class="ri-heart-line text-4xl text-red-700 cursor-pointer"
-            onclick="favoriteRecipe()"
-          ></i>
-          <p id="time-{{ id }}" class="mt-2 text-xs"></p>
-        </div>
-      </div>
-    </div>
-  </div>
-  {{/recipes}}
-  {{> ../components/formRecipe }}
-
-  {{^recipes}}
-  <h1>No recipes</h1>
-  {{/recipes}}
-</div>
-
+  id="recipeContainer"
+></div>
 <script>
-  let starsContainer
-  let yellowStar = document.createElement('i')
-  const grayStar = document.createElement('i')
-  let numGray
+  fetch('/recipes', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const recipeContainer = document.getElementById('recipeContainer')
 
-  let timeContainer, hours, minutes, seconds, formattedTime
-  ;`{{#recipes}}`
-  function favoriteRecipe() {
-    fetch('/favorite', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        recipeId: '{{id}}'
-      })
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.data}`)
+      console.log(data)
+      data.recipes.forEach((recipeItem) => {
+        let card = document.createElement('div')
+        card.className = 'relative h-56 w-52 bg-slate-300 rounded-md'
+
+        let cardInner = document.createElement('div')
+        cardInner.className =
+          'h-22 absolute bottom-0 left-0 w-full bg-slate-400 rounded-md'
+
+        let content = document.createElement('div')
+        content.className = 'flex'
+
+        let leftSide = document.createElement('div')
+        leftSide.className = 'p-2 cursor-pointer'
+        leftSide.onclick = function () {
+          window.location.href = '/recipe/' + recipeItem.id
         }
-        return res.json()
+
+        let recipeName = document.createElement('h2')
+        recipeName.className = 'text-base font-bold'
+        recipeName.textContent = recipeItem.name
+
+        let recipeCost = document.createElement('p')
+        recipeCost.className = 'text-xl font-medium text-red-800'
+        recipeCost.textContent = recipeItem.cost + '€'
+
+        let starsContainer = document.createElement('div')
+        starsContainer.id = 'stars-' + recipeItem.id
+        starsContainer.className = 'flex'
+
+        leftSide.appendChild(recipeName)
+        leftSide.appendChild(recipeCost)
+
+        let rightSide = document.createElement('div')
+        rightSide.className =
+          'absolute right-4 top-4 flex flex-col items-center justify-center'
+
+        let heartIcon = document.createElement('i')
+
+        let isLiked = recipeItem.is_favorited === 1
+
+        if (isLiked) {
+          heartIcon.className =
+            'ri-heart-fill text-4xl text-red-700 cursor-pointer'
+        } else {
+          heartIcon.className =
+            'ri-heart-line text-4xl text-red-700 cursor-pointer'
+        }
+
+        heartIcon.onclick = async () => {
+          isLiked = !isLiked
+          try {
+            if (isLiked) {
+              console.log('Liked')
+              await addToFavorites(recipeItem.id)
+              heartIcon.className =
+                'ri-heart-fill text-4xl text-red-700 cursor-pointer'
+            } else {
+              await removeFromFavorites(recipeItem.id)
+              heartIcon.className =
+                'ri-heart-line text-4xl text-red-700 cursor-pointer'
+            }
+          } catch (error) {
+            console.error('Error:', error)
+          }
+        }
+
+        let timeElement = document.createElement('p')
+        timeElement.id = 'time-' + recipeItem.id
+        timeElement.className = 'mt-2 text-xs'
+
+        let yellowStar = document.createElement('i')
+        let grayStar = document.createElement('i')
+        let numGray
+
+        let timeContainer, hours, minutes, seconds, formattedTime
+
+        yellowStar.className = 'ri-star-fill text-yellow-500'
+        grayStar.className = 'ri-star-fill'
+
+        for (let i = 0; i < `${recipeItem.difficulty}`; i++) {
+          starsContainer.appendChild(yellowStar.cloneNode(true))
+        }
+
+        numGray = 5 - recipeItem.difficulty
+
+        for (let i = 0; i < numGray; i++) {
+          starsContainer.appendChild(grayStar.cloneNode(true))
+        }
+
+        leftSide.appendChild(starsContainer)
+
+        function formatTime(timeString) {
+          ;[hours, minutes, seconds] = timeString.split(':').map(Number)
+        }
+        formatTime(recipeItem.time)
+        formattedTime = ''
+
+        if (hours !== 0) {
+          formattedTime = hours + 'h'
+          if (minutes !== 0) {
+            formattedTime += ' e ' + minutes + 'm'
+          }
+        } else {
+          formattedTime = minutes + 'm'
+        }
+        timeElement.innerHTML = formattedTime
+
+        rightSide.appendChild(heartIcon)
+        rightSide.appendChild(timeElement)
+
+        content.appendChild(leftSide)
+        content.appendChild(rightSide)
+
+        cardInner.appendChild(content)
+
+        card.appendChild(cardInner)
+
+        recipeContainer.appendChild(card)
       })
-      .then((data) => {
-        console.log(data)
-      })
-      .catch((error) => {
-        console.error('Error:', error)
-      })
-  }
+      async function addToFavorites(recipeId) {
+        const response = await fetch('/favorite', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ recipeId }),
+        })
 
-  starsContainer = document.getElementById('stars-{{id}}')
-  yellowStar.className = 'ri-star-fill text-yellow-500'
-  grayStar.className = 'ri-star-fill'
+        if (!response.ok) {
+          throw new Error('Failed to add to favorites')
+        }
+      }
+      async function removeFromFavorites(recipeId) {
+        const response = await fetch(`/favorite`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ recipeId }),
+        })
 
-  for (let i = 0; i < `{{difficulty}}`; i++) {
-    starsContainer.appendChild(yellowStar.cloneNode(true))
-  }
-
-  numGray = 5 - `{{difficulty}}`
-
-  for (let i = 0; i < numGray; i++) {
-    starsContainer.appendChild(grayStar.cloneNode(true))
-  }
-
-  timeContainer = document.getElementById('time-{{id}}')
-
-  function formatTime(timeString) {
-    ;[hours, minutes, seconds] = timeString.split(':').map(Number)
-  }
-  formatTime('{{time}}')
-  formattedTime = ''
-
-  if (hours !== 0) {
-    formattedTime = hours + 'h'
-    if (minutes !== 0) {
-      formattedTime += ' e ' + minutes + 'm'
-    }
-  } else {
-    formattedTime = minutes + 'm'
-  }
-
-  timeContainer.innerHTML = formattedTime
-  ;`{{/recipes}}`
+        if (!response.ok) {
+          throw new Error('Failed to remove from favorites')
+        }
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 </script>
