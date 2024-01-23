@@ -19,12 +19,15 @@ export const getAll = async (userId = null) => {
         category ON recipe.category_id = category.id
       LEFT JOIN
         favorite ON recipe.id = favorite.recipe_id AND favorite.user_id = ?
+      ORDER BY recipe.id DESC
       `
     } else {
       query = `
         SELECT recipe.*, category.name AS category_name 
         FROM recipe 
-        JOIN category ON recipe.category_id = category.id `
+        JOIN category ON recipe.category_id = category.id
+        ORDER BY recipe.id DESC
+        `
     }
     const [rows] = await connection.execute(query, [userId])
 
