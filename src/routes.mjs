@@ -22,7 +22,8 @@ router.post('/favorite', verifyToken, favoriteController.create)
 router.delete('/favorite', verifyToken, favoriteController.remove)
 
 // Recipe
-router.get('/recipes', recipeController.getAll)
+router.get('/recipes', recipeController.page)
+router.get('/recipesList', recipeController.getAll)
 router.get('/recipes/byCategory/:categoryId', recipeController.getByCategory)
 router.get('/recipe/:id', recipeController.get)
 router.post('/recipe', verifyToken, recipeController.create)

@@ -3,12 +3,12 @@
   id="recipeContainer"
 ></div>
 <script>
-  fetch('/recipes', {
+  fetch('/recipesList', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
+      Authorization: `Bearer ${token}`
+    }
   })
     .then((response) => response.json())
     .then((data) => {
@@ -50,7 +50,6 @@
         let rightSide = document.createElement('div')
         rightSide.className =
           'absolute right-4 top-4 flex flex-col items-center justify-center'
-
         let heartIcon = document.createElement('i')
 
         let isLiked = recipeItem.is_favorited === 1
@@ -134,14 +133,15 @@
 
         recipeContainer.appendChild(card)
       })
+
       async function addToFavorites(recipeId) {
         const response = await fetch('/favorite', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`
           },
-          body: JSON.stringify({ recipeId }),
+          body: JSON.stringify({ recipeId })
         })
 
         if (!response.ok) {
@@ -153,9 +153,9 @@
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`
           },
-          body: JSON.stringify({ recipeId }),
+          body: JSON.stringify({ recipeId })
         })
 
         if (!response.ok) {
