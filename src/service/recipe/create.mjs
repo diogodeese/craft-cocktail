@@ -3,8 +3,13 @@ import { getConnection } from './../../config/database-connection.mjs'
 export const create = async (newRecipe) => {
   let connection
 
+
   try {
     connection = await getConnection()
+
+    const hours = Math.floor(newRecipe.time / 60);
+    const minutes = newRecipe.time % 60;
+    newRecipe.time = `${hours}:${minutes}:00`;
 
     const query =
       'INSERT INTO recipe (name, author, ingredients, preparation_description, difficulty, category_id, time, cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
