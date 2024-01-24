@@ -15,6 +15,7 @@ router.get('/backoffice', appController.backoffice)
 
 // Category
 router.post('/category', categoryController.create)
+router.put('/category', categoryController.update)
 router.get('/categories', categoryController.getAll)
 
 // Favorite
