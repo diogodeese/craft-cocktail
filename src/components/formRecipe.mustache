@@ -1,4 +1,4 @@
-<div class="w-auto bg-slate-900 p-4">
+<div class="w-auto bg-slate-900 pt-12 pb-6 px-8 flex gap-4">
   <button
     data-modal-target="crud-modal"
     data-modal-toggle="crud-modal"
@@ -7,6 +7,7 @@
   >
     Add Recipe
   </button>
+  {{> ../components/categoryComboBox }}
 </div>
 
 <!-- Main modal -->
@@ -140,10 +141,6 @@
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
             >
               <option selected="">Select category</option>
-              <option value="TV">TV/Monitors</option>
-              <option value="PC">PC</option>
-              <option value="GA">Gaming/Console</option>
-              <option value="PH">Phones</option>
             </select>
           </div>
           <div class="col-span-2">
@@ -185,30 +182,54 @@
 </div>
 
 <script>
+  fetch('/categories')
+    .then((response) => response.json())
+    .then((data) => {
+      const categorySelect = document.getElementById('category')
+
+      // Loop through categories and create an option element for each
+      data.categories.forEach((category) => {
+        const option = document.createElement('option')
+        option.value = category.id // Set the value to the category ID
+        option.textContent = category.name // Set the text content to the category name
+        categorySelect.appendChild(option) // Append the option to the select element
+      })
+    })
+    .catch((error) => console.error('Error fetching categories:', error))
+
   function addRecipe() {
     const token = localStorage.getItem('token')
-    console.log(document.getElementById('description').value)
+    const selectedOption =
+      document.getElementById('category').options[
+        document.getElementById('category').selectedIndex
+      ]
+
+    console.log(selectedOption.value)
     let newRecipe = {
       name: document.getElementById('name').value,
       ingredients: document.getElementById('ingredients').value,
       preparation_description: document.getElementById('description').value,
       difficulty: document.getElementById('difficulty').value,
-      category_id: 1,
+      category_id: selectedOption.value,
       time: document.getElementById('time').value,
-      cost: document.getElementById('cost').value
+      cost: document.getElementById('cost').value,
     }
 
     fetch('/recipe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(newRecipe)
-    }).then((result) => {
-      result.json({ message: 'Recipe created successfully', result })
-
-      window.location.href = '/recipes'
+      body: JSON.stringify(newRecipe),
     })
+      .then((result) => {
+        result.json({ message: 'Recipe created successfully', result })
+
+        window.location.href = '/recipes'
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }
 </script>
