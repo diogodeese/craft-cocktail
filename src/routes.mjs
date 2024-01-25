@@ -15,9 +15,9 @@ router.get('/backoffice', appController.backoffice)
 
 // Category
 router.post('/category', categoryController.create)
-router.put('/category/:categoryId', categoryController.update)
+router.put('/category', verifyToken, categoryController.update)
 router.get('/categories', categoryController.getAll)
-router.get("/category/:categoryId", categoryController.get)
+router.get('/category/:categoryId', categoryController.get)
 
 // Favorite
 router.post('/favorite', verifyToken, favoriteController.create)
