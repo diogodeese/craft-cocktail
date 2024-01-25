@@ -3,203 +3,239 @@
   id="recipeContainer"
 ></div>
 <script>
-  const getRandomColorClass = () => {
-    const colors = [
-      'bg-red-300',
-      'bg-blue-300',
-      'bg-green-300',
-      'bg-yellow-300',
-      'bg-indigo-300',
-      'bg-purple-300',
-      'bg-pink-300',
-      'bg-orange-300',
-      'bg-violet-300',
-    ]
+  getAllRecipes();
 
-    const randomIndex = Math.floor(Math.random() * colors.length)
-    return colors[randomIndex]
+  function clearRecipeContainer() {
+    const recipeContainer = document.getElementById("recipeContainer");
+    while (recipeContainer.firstChild) {
+      recipeContainer.removeChild(recipeContainer.firstChild);
+    }
   }
 
-  fetch('/recipesList', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      const recipeContainer = document.getElementById('recipeContainer')
+  function handleChanges(option) {
+    if (option === 0) {
+      getAllRecipes();
+      return;
+    }
 
-      const getRandomColorClass = () => {
-        const colors = [
-          'bg-red-300',
-          'bg-blue-300',
-          'bg-green-300',
-          'bg-yellow-300',
-          'bg-indigo-300',
-          'bg-purple-300',
-          'bg-pink-300',
-          'bg-orange-300',
-          'bg-amber-300',
-          'bg-lime-300',
-          'bg-violet-300',
-        ]
+    fetch("/recipes/byCategory/" + option, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        clearRecipeContainer();
+        generateRecipes(data.recipes);
+      });
+  }
 
-        const randomIndex = Math.floor(Math.random() * colors.length)
-        return colors[randomIndex]
-      }
+  const getRandomColorClass = () => {
+    const colors = [
+      "bg-red-300",
+      "bg-blue-300",
+      "bg-green-300",
+      "bg-yellow-300",
+      "bg-indigo-300",
+      "bg-purple-300",
+      "bg-pink-300",
+      "bg-orange-300",
+      "bg-violet-300",
+    ];
 
-      data.recipes.forEach((recipeItem) => {
-        let card = document.createElement('div')
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    return colors[randomIndex];
+  };
 
-        card.className = `relative h-56 w-52 ${getRandomColorClass()} rounded-md`
-
-        let cardInner = document.createElement('div')
-        cardInner.className =
-          'h-22 absolute bottom-0 left-0 w-full bg-slate-200 rounded-md'
-
-        let content = document.createElement('div')
-        content.className = 'flex'
-
-        let leftSide = document.createElement('div')
-        leftSide.className = 'p-2 cursor-pointer w-36'
-        leftSide.onclick = function () {
-          window.location.href = '/recipe/' + recipeItem.id
-        }
-
-        let recipeName = document.createElement('h2')
-        recipeName.className = 'text-base font-bold truncate '
-        recipeName.textContent = recipeItem.name
-
-        let recipeCost = document.createElement('p')
-        recipeCost.className = 'text-xl font-medium text-red-800'
-        recipeCost.textContent = recipeItem.cost + '€'
-
-        let starsContainer = document.createElement('div')
-        starsContainer.id = 'stars-' + recipeItem.id
-        starsContainer.className = 'flex'
-
-        leftSide.appendChild(recipeName)
-        leftSide.appendChild(recipeCost)
-
-        let rightSide = document.createElement('div')
-        rightSide.className =
-          'absolute right-4 top-4 flex flex-col items-center justify-center'
-        let heartIcon = document.createElement('i')
-
-        let isLiked = recipeItem.is_favorited === 1
-
-        if (isLiked) {
-          heartIcon.className =
-            'ri-heart-fill text-4xl text-red-700 cursor-pointer'
-        } else {
-          heartIcon.className =
-            'ri-heart-line text-4xl text-red-700 cursor-pointer'
-        }
-
-        heartIcon.onclick = async () => {
-          isLiked = !isLiked
-          try {
-            if (isLiked) {
-              console.log('Liked')
-              await addToFavorites(recipeItem.id)
-              heartIcon.className =
-                'ri-heart-fill text-4xl text-red-700 cursor-pointer'
-            } else {
-              await removeFromFavorites(recipeItem.id)
-              heartIcon.className =
-                'ri-heart-line text-4xl text-red-700 cursor-pointer'
-            }
-          } catch (error) {
-            console.error('Error:', error)
-          }
-        }
-
-        let timeElement = document.createElement('p')
-        timeElement.id = 'time-' + recipeItem.id
-        timeElement.className = 'mt-2 text-xs'
-
-        let yellowStar = document.createElement('i')
-        let grayStar = document.createElement('i')
-        let numGray
-
-        let timeContainer, hours, minutes, seconds, formattedTime
-
-        yellowStar.className = 'ri-star-fill text-yellow-500'
-        grayStar.className = 'ri-star-fill'
-
-        for (let i = 0; i < `${recipeItem.difficulty}`; i++) {
-          starsContainer.appendChild(yellowStar.cloneNode(true))
-        }
-
-        numGray = 5 - recipeItem.difficulty
-
-        for (let i = 0; i < numGray; i++) {
-          starsContainer.appendChild(grayStar.cloneNode(true))
-        }
-
-        leftSide.appendChild(starsContainer)
-
-        function formatTime(timeString) {
-          ;[hours, minutes, seconds] = timeString.split(':').map(Number)
-        }
-        formatTime(recipeItem.time)
-        formattedTime = ''
-
-        if (hours !== 0) {
-          formattedTime = hours + 'h'
-          if (minutes !== 0) {
-            formattedTime += ' e ' + minutes + 'm'
-          }
-        } else {
-          formattedTime = minutes + 'm'
-        }
-        timeElement.innerHTML = formattedTime
-
-        rightSide.appendChild(heartIcon)
-        rightSide.appendChild(timeElement)
-
-        content.appendChild(leftSide)
-        content.appendChild(rightSide)
-
-        cardInner.appendChild(content)
-
-        card.appendChild(cardInner)
-
-        recipeContainer.appendChild(card)
+  function getAllRecipes() {
+    fetch("/recipesList", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        clearRecipeContainer();
+        generateRecipes(data.recipes);
       })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-      async function addToFavorites(recipeId) {
-        const response = await fetch('/favorite', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ recipeId }),
-        })
+  function generateRecipes(recipes) {
+    const recipeContainer = document.getElementById("recipeContainer");
 
-        if (!response.ok) {
-          throw new Error('Failed to add to favorites')
-        }
+    const getRandomColorClass = () => {
+      const colors = [
+        "bg-red-300",
+        "bg-blue-300",
+        "bg-green-300",
+        "bg-yellow-300",
+        "bg-indigo-300",
+        "bg-purple-300",
+        "bg-pink-300",
+        "bg-orange-300",
+        "bg-amber-300",
+        "bg-lime-300",
+        "bg-violet-300",
+      ];
+
+      const randomIndex = Math.floor(Math.random() * colors.length);
+      return colors[randomIndex];
+    };
+
+    recipes.forEach((recipeItem) => {
+      let card = document.createElement("div");
+
+      card.className = `relative h-56 w-52 ${getRandomColorClass()} rounded-md`;
+
+      let cardInner = document.createElement("div");
+      cardInner.className =
+        "h-22 absolute bottom-0 left-0 w-full bg-slate-200 rounded-md";
+
+      let content = document.createElement("div");
+      content.className = "flex";
+
+      let leftSide = document.createElement("div");
+      leftSide.className = "p-2 cursor-pointer w-36";
+      leftSide.onclick = function () {
+        window.location.href = "/recipe/" + recipeItem.id;
+      };
+
+      let recipeName = document.createElement("h2");
+      recipeName.className = "text-base font-bold truncate ";
+      recipeName.textContent = recipeItem.name;
+
+      let recipeCost = document.createElement("p");
+      recipeCost.className = "text-xl font-medium text-red-800";
+      recipeCost.textContent = recipeItem.cost + "€";
+
+      let starsContainer = document.createElement("div");
+      starsContainer.id = "stars-" + recipeItem.id;
+      starsContainer.className = "flex";
+
+      leftSide.appendChild(recipeName);
+      leftSide.appendChild(recipeCost);
+
+      let rightSide = document.createElement("div");
+      rightSide.className =
+        "absolute right-4 top-4 flex flex-col items-center justify-center";
+      let heartIcon = document.createElement("i");
+
+      let isLiked = recipeItem.is_favorited === 1;
+
+      if (isLiked) {
+        heartIcon.className =
+          "ri-heart-fill text-4xl text-red-700 cursor-pointer";
+      } else {
+        heartIcon.className =
+          "ri-heart-line text-4xl text-red-700 cursor-pointer";
       }
-      async function removeFromFavorites(recipeId) {
-        const response = await fetch(`/favorite`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ recipeId }),
-        })
 
-        if (!response.ok) {
-          throw new Error('Failed to remove from favorites')
+      heartIcon.onclick = async () => {
+        isLiked = !isLiked;
+        try {
+          if (isLiked) {
+            console.log("Liked");
+            await addToFavorites(recipeItem.id);
+            heartIcon.className =
+              "ri-heart-fill text-4xl text-red-700 cursor-pointer";
+          } else {
+            await removeFromFavorites(recipeItem.id);
+            heartIcon.className =
+              "ri-heart-line text-4xl text-red-700 cursor-pointer";
+          }
+        } catch (error) {
+          console.error("Error:", error);
         }
+      };
+
+      let timeElement = document.createElement("p");
+      timeElement.id = "time-" + recipeItem.id;
+      timeElement.className = "mt-2 text-xs";
+
+      let yellowStar = document.createElement("i");
+      let grayStar = document.createElement("i");
+      let numGray;
+
+      let timeContainer, hours, minutes, seconds, formattedTime;
+
+      yellowStar.className = "ri-star-fill text-yellow-500";
+      grayStar.className = "ri-star-fill";
+
+      for (let i = 0; i < `${recipeItem.difficulty}`; i++) {
+        starsContainer.appendChild(yellowStar.cloneNode(true));
       }
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+
+      numGray = 5 - recipeItem.difficulty;
+
+      for (let i = 0; i < numGray; i++) {
+        starsContainer.appendChild(grayStar.cloneNode(true));
+      }
+
+      leftSide.appendChild(starsContainer);
+
+      function formatTime(timeString) {
+        [hours, minutes, seconds] = timeString.split(":").map(Number);
+      }
+      formatTime(recipeItem.time);
+      formattedTime = "";
+
+      if (hours !== 0) {
+        formattedTime = hours + "h";
+        if (minutes !== 0) {
+          formattedTime += " e " + minutes + "m";
+        }
+      } else {
+        formattedTime = minutes + "m";
+      }
+      timeElement.innerHTML = formattedTime;
+
+      rightSide.appendChild(heartIcon);
+      rightSide.appendChild(timeElement);
+
+      content.appendChild(leftSide);
+      content.appendChild(rightSide);
+
+      cardInner.appendChild(content);
+
+      card.appendChild(cardInner);
+
+      recipeContainer.appendChild(card);
+    });
+
+    async function addToFavorites(recipeId) {
+      const response = await fetch("/favorite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ recipeId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add to favorites");
+      }
+    }
+    async function removeFromFavorites(recipeId) {
+      const response = await fetch(`/favorite`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ recipeId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to remove from favorites");
+      }
+    }
+  }
 </script>

@@ -45,8 +45,11 @@ export const signUp = async (email, password) => {
   try {
     connection = await getConnection()
 
-    const insertQuery = 'INSERT INTO user (email, password) VALUES (?, ?)'
+    const name = email.split('@')[0]
+
+    const insertQuery = 'INSERT INTO user (name, email, password) VALUES (?, ?, ?)'
     const [result] = await connection.execute(insertQuery, [
+      name,
       email,
       hashedPassword,
     ])

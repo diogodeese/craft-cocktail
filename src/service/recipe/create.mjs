@@ -3,7 +3,6 @@ import { getConnection } from './../../config/database-connection.mjs'
 export const create = async (newRecipe) => {
   let connection
 
-
   try {
     connection = await getConnection()
 
