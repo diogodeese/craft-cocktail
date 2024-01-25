@@ -31,6 +31,25 @@
     .then((data) => {
       const recipeContainer = document.getElementById('recipeContainer')
 
+      const getRandomColorClass = () => {
+        const colors = [
+          'bg-red-300',
+          'bg-blue-300',
+          'bg-green-300',
+          'bg-yellow-300',
+          'bg-indigo-300',
+          'bg-purple-300',
+          'bg-pink-300',
+          'bg-orange-300',
+          'bg-amber-300',
+          'bg-lime-300',
+          'bg-violet-300',
+        ]
+
+        const randomIndex = Math.floor(Math.random() * colors.length)
+        return colors[randomIndex]
+      }
+
       data.recipes.forEach((recipeItem) => {
         let card = document.createElement('div')
 
@@ -38,7 +57,7 @@
 
         let cardInner = document.createElement('div')
         cardInner.className =
-          'h-22 absolute bottom-0 left-0 w-full bg-slate-300 rounded-md'
+          'h-22 absolute bottom-0 left-0 w-full bg-slate-200 rounded-md'
 
         let content = document.createElement('div')
         content.className = 'flex'
@@ -50,7 +69,7 @@
         }
 
         let recipeName = document.createElement('h2')
-        recipeName.className = 'text-base font-bold truncate'
+        recipeName.className = 'text-base font-bold truncate '
         recipeName.textContent = recipeItem.name
 
         let recipeCost = document.createElement('p')
