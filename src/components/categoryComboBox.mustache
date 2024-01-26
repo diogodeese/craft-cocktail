@@ -32,30 +32,37 @@
     aria-labelledby="dropdownHoverButton"
     id="categoryDropdown"
   >
-    <li><button onclick="handleChanges(0)">Vazio</button></li>
+    <li>
+      <button
+        onclick="handleChanges(0)"
+        class="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+      >
+        Vazio
+      </button>
+    </li>
   </ul>
 </div>
 
 <script>
-  fetch("/categories", {
-    method: "GET",
+  fetch('/categories', {
+    method: 'GET',
   })
     .then((response) => response.json())
     .then((data) => {
-      const categoryDropdown = document.getElementById("categoryDropdown");
+      const categoryDropdown = document.getElementById('categoryDropdown')
 
       data.categories.forEach((category) => {
-        const listItem = document.createElement("li");
-        const button = document.createElement("button");
+        const listItem = document.createElement('li')
+        const button = document.createElement('button')
 
-        button.onclick = () => handleChanges(category.id);
-        button.textContent = category.name;
+        button.onclick = () => handleChanges(category.id)
+        button.textContent = category.name
         button.className =
-          "block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white";
+          'block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'
 
-        listItem.appendChild(button);
-        categoryDropdown.appendChild(listItem);
-      });
+        listItem.appendChild(button)
+        categoryDropdown.appendChild(listItem)
+      })
     })
-    .catch((error) => console.error("Error fetching categories:", error));
+    .catch((error) => console.error('Error fetching categories:', error))
 </script>
