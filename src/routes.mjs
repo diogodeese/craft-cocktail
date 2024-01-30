@@ -36,4 +36,7 @@ router.post('/signIn', userController.signIn)
 router.get('/signUp', userController.signUp)
 router.post('/signUp', userController.signUp)
 
+// 404
+router.all('*', appController.notFound)
+
 export { router }
